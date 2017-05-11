@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8" />
+  <meta th:include="/common/head"/>
+  <title>edit</title>
+</head>
+<body>
+  <div th:replace="/common/navigation"></div>
+  <form method="post" th:object="${formModel}">
+    <input type="hidden" name="_method" value="PUT"/>
+    <table>
+      <tr>
+        <td>Title</td>
+        <td><input type="text" name="title" th:value="*{title}" /></td>
+      </tr>
+      <tr>
+        <td>Description</td>
+        <td><input type="text" name="description"
+          th:value="*{description}" /></td>
+      </tr>
+      <tr>
+        <td>User_id</td>
+        <td><input type="text" name="user_id" th:value="*{user_id}" /></td>
+      </tr>
+      <tr>
+        <td><input type="submit" /></td>
+      </tr>
+    </table>
+  </form>
+</body>
+</html>

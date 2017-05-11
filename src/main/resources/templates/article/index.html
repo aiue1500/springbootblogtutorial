@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8" />
+  <meta th:replace="/common/head"/>
+<title>記事一覧</title>
+</head>
+<body>
+<div class="container">
+  <div th:replace="/common/navigation"></div>
+  <table class="table">
+    <tr>
+      <th>ID</th>
+      <th>Title</th>
+      <th>Description</th>
+      <th>Created_at</th>
+      <th>Updated_at</th>
+      <th>user_id</th>
+    </tr>
+    <tr th:each="obj : ${datalist}">
+      <td th:text="${obj.id}"></td>
+      <td th:text="${obj.title}"></td>
+      <td th:text="${obj.description}"></td>
+      <td th:text="${obj.created_at}"></td>
+      <td th:text="${obj.updated_at}"></td>
+      <td th:text="${obj.user_id}"></td>  
+      <td><a class="btn btn-primary" th:href="@{'/article/' + ${obj.id}}">Show</a></td>
+      <td><a class="btn btn-secondary" th:href="@{'/article/' + ${obj.id} + '/edit'}">Edit</a></td>
+      <td><a class="btn btn-danger" th:href="@{'/article/' + ${obj.id} + '/delete'}">Delete</a></td>
+    </tr>
+  </table>
+</div>
+</body>
+</html>
