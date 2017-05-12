@@ -16,31 +16,20 @@ CREATE DATABASE testdb
     CONNECTION LIMIT = -1;
     
     
-CREATE SCHEMA public
-    AUTHORIZATION postgres;
-
-COMMENT ON SCHEMA public
-    IS 'standard public schema';
-
-GRANT ALL ON SCHEMA public TO postgres;
-
-GRANT ALL ON SCHEMA public TO PUBLIC;
-
-CREATE TABLE public.article
+CREATE TABLE article
 (
-    id integer NOT NULL DEFAULT nextval('article_id_seq'::regclass),
-    title character varying(50) COLLATE pg_catalog."default" NOT NULL,
-    description character varying(500) COLLATE pg_catalog."default" NOT NULL,
+    id SERIAL PRIMARY KEY,
+    title character varying(50) NOT NULL,
+    description character varying(500) NOT NULL,
     created_at timestamp(6) with time zone NOT NULL,
     updated_at timestamp(6) with time zone NOT NULL,
-    user_id integer NOT NULL,
-    CONSTRAINT article_pkey PRIMARY KEY (id)
-)
-WITH (
-    OIDS = FALSE
-)
-TABLESPACE pg_default;
+    user_id integer NOT NULL
+);
 
-ALTER TABLE public.article
-    OWNER to postgres;
 ```
+
+`http://localhost:8080/article/`にアクセスする
+
+進捗：
+記事のCRUD操作を実装
+バリデーションチェックまではできていない。
