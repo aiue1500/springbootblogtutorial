@@ -1,6 +1,5 @@
 package com.example.model;
 
-import java.time.LocalDateTime;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -9,6 +8,10 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
+import org.hibernate.validator.constraints.NotEmpty;
 
 @Entity
 @Table(name = "article")
@@ -19,9 +22,13 @@ public class Article {
   private int id;
   
   @Column(name="title")
+  @Size(max=255)
+  @NotEmpty(message="タイトルを入力してください")
   private String title;
   
   @Column(name="description")
+  @Size(max=1000 ,message="文字数が多すぎます。(最大1000）")
+  @NotEmpty(message="本文を入力してください")
   private String description;
   
   @Column(name="created_at")
@@ -30,6 +37,7 @@ public class Article {
   @Column(name="updated_at")
   private Date updated_at;
   
+  @NotNull(message="ユーザIDが指定されていません。")
   @Column(name="user_id")
   private int user_id;
 

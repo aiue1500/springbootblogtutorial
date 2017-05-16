@@ -1,11 +1,17 @@
 package com.example.controller;
 
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.log;
+
 import java.util.Date;
 import java.util.List;
+
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.Errors;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,7 +31,7 @@ public class ArticleController {
 
   // index
   @RequestMapping(value = "/", method = RequestMethod.GET)
-  public ModelAndView index(ModelAndView mav) {
+  public ModelAndView index(@ModelAttribute("formModel")Article article , ModelAndView mav) {
     List<Article> datalist = service.findAll();
     mav.setViewName("article/index");
     mav.addObject("datalist", datalist);
@@ -34,13 +40,24 @@ public class ArticleController {
 
   // create
   @RequestMapping(value = "/create", method = RequestMethod.GET)
-  public ModelAndView create(ModelAndView mav) {
+  public ModelAndView create(@ModelAttribute("formModel")Article article , ModelAndView mav) {
     mav.setViewName("article/create");
+    System.out.println(article.getTitle());
+    mav.addObject("formModel",article);
     return mav;
   }
 
   @RequestMapping(value = "/create", method = RequestMethod.POST)
-  public ModelAndView post_create(@ModelAttribute("formModel") Article article, ModelAndView mav) {
+  public ModelAndView post_create(ModelAndView mav,@ModelAttribute("formModel") @Valid Article article,BindingResult result) {
+    //バリデーションチェック
+    if(result.hasErrors()){;
+      //入力情報を保持しつつ、作成画面に戻す
+      ModelAndView return_mav = new ModelAndView();
+      return_mav.addObject(article);
+      return_mav.setViewName("article/create");
+      return return_mav;
+    }
+    
     // 日付の設定
     article.setCreated_at(new Date());
     article.setUpdated_at(new Date());
