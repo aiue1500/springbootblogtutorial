@@ -1,7 +1,5 @@
 package com.example.controller;
 
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.log;
-
 import java.util.Date;
 import java.util.List;
 
@@ -10,8 +8,6 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.Errors;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -42,13 +38,12 @@ public class ArticleController {
   @RequestMapping(value = "/create", method = RequestMethod.GET)
   public ModelAndView create(@ModelAttribute("formModel")Article article , ModelAndView mav) {
     mav.setViewName("article/create");
-    System.out.println(article.getTitle());
     mav.addObject("formModel",article);
     return mav;
   }
 
   @RequestMapping(value = "/create", method = RequestMethod.POST)
-  public ModelAndView post_create(ModelAndView mav,@ModelAttribute("formModel") @Valid Article article,BindingResult result) {
+  public ModelAndView post_create(ModelAndView mav,@ModelAttribute("formModel") @Valid Article article , BindingResult result) {
     //バリデーションチェック
     if(result.hasErrors()){;
       //入力情報を保持しつつ、作成画面に戻す
