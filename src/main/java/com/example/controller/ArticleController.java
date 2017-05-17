@@ -16,6 +16,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.model.Article;
+import com.example.model.ArticleListForm;
 import com.example.service.ArticleService;
 
 @Controller
@@ -27,32 +28,34 @@ public class ArticleController {
 
   // index
   @RequestMapping(value = "/", method = RequestMethod.GET)
-  public ModelAndView index(@ModelAttribute("formModel")Article article , ModelAndView mav) {
-    List<Article> datalist = service.findAll();
+  public ModelAndView index(@ModelAttribute("searchFormModel") ArticleListForm articleListForm, BindingResult result,ModelAndView mav) {
+    List<Article> datalist = service.findArticle(articleListForm);
     mav.setViewName("article/index");
+    mav.addObject("searchFormModel",articleListForm);
     mav.addObject("datalist", datalist);
     return mav;
   }
 
   // create
   @RequestMapping(value = "/create", method = RequestMethod.GET)
-  public ModelAndView create(@ModelAttribute("formModel")Article article , ModelAndView mav) {
+  public ModelAndView create(@ModelAttribute("formModel") Article article, ModelAndView mav) {
     mav.setViewName("article/create");
-    mav.addObject("formModel",article);
+    mav.addObject("formModel", article);
     return mav;
   }
 
   @RequestMapping(value = "/create", method = RequestMethod.POST)
-  public ModelAndView post_create(ModelAndView mav,@ModelAttribute("formModel") @Valid Article article , BindingResult result) {
-    //バリデーションチェック
-    if(result.hasErrors()){;
-      //入力情報を保持しつつ、作成画面に戻す
+  public ModelAndView post_create(ModelAndView mav, @ModelAttribute("formModel") @Valid Article article,
+      BindingResult result) {
+    // バリデーションチェック
+    if (result.hasErrors()) {
+      // 入力情報を保持しつつ、作成画面に戻す
       ModelAndView return_mav = new ModelAndView();
       return_mav.addObject(article);
       return_mav.setViewName("article/create");
       return return_mav;
     }
-    
+
     // 日付の設定
     article.setCreated_at(new Date());
     article.setUpdated_at(new Date());
@@ -79,7 +82,7 @@ public class ArticleController {
   }
 
   @RequestMapping(value = "/{id}/edit", method = RequestMethod.PUT)
-  public ModelAndView post_edit(@ModelAttribute("formModel") Article article ,BindingResult result, ModelAndView mav) {
+  public ModelAndView post_edit(@ModelAttribute("formModel") Article article, BindingResult result, ModelAndView mav) {
     // 更新日付の更新
     article.setCreated_at(service.findOne(article.getId()).getCreated_at());
     article.setUpdated_at(new Date());
@@ -88,8 +91,8 @@ public class ArticleController {
   }
 
   // delete
-  @RequestMapping(value = "/{id}/delete" , method = RequestMethod.GET)
-  public ModelAndView delete(@PathVariable Integer id,RedirectAttributes attributes,ModelAndView mav){
+  @RequestMapping(value = "/{id}/delete", method = RequestMethod.GET)
+  public ModelAndView delete(@PathVariable Integer id, RedirectAttributes attributes, ModelAndView mav) {
     service.delete(id);
     attributes.addFlashAttribute("deleteMessage", "delete ID:" + id);
     return new ModelAndView("redirect:/article/");

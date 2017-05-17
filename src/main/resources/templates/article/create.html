@@ -2,11 +2,11 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="UTF-8" />
-<meta th:include="/common/head :: head" />
+<meta th:include="common/head :: head" />
 <title>Create</title>
 </head>
 <body>
-  <div th:include="/common/navigation :: nav"></div>
+  <div th:include="common/navigation :: nav"></div>
   <form method="post" th:object="${formModel}">
     <table>
       <tr>
@@ -35,5 +35,6 @@
       </tr>
     </table>
   </form>
+  <button class="previos-page-back btn btn-secondary">戻る</button>
 </body>
 </html>
