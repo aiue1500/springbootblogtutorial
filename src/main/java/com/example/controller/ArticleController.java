@@ -46,7 +46,7 @@ public class ArticleController {
   // create
   @RequestMapping(value = "/create", method = RequestMethod.GET)
   public ModelAndView create(@ModelAttribute("formModel") Article article, ModelAndView mav) {
-    mav.setViewName("article/create");
+    mav.setViewName("article/edit");
     mav.addObject("title", "新規作成");
     //ユーザIDを設定
     article.setUser_id(1);
@@ -62,7 +62,7 @@ public class ArticleController {
       // 入力情報を保持しつつ、作成画面に戻す
       ModelAndView return_mav = new ModelAndView();
       return_mav.addObject(article);
-      return_mav.setViewName("article/create");
+      return_mav.setViewName("article/edit");
       return return_mav;
     }
 
@@ -85,7 +85,7 @@ public class ArticleController {
   // update
   @RequestMapping(value = "/{id}/edit", method = RequestMethod.GET)
   public ModelAndView edit(@PathVariable("id") Integer id, ModelAndView mav) {
-    mav.setViewName("/article/create");
+    mav.setViewName("/article/edit");
     Article article = service.findOne(id);
     mav.addObject("title","記事編集");
     mav.addObject("formModel", article);
