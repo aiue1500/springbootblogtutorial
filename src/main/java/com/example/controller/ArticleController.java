@@ -28,7 +28,14 @@ public class ArticleController {
 
   // index
   @RequestMapping(value = "/", method = RequestMethod.GET)
-  public ModelAndView index(@ModelAttribute("searchFormModel") ArticleListForm articleListForm, BindingResult result,ModelAndView mav) {
+  public ModelAndView index(@ModelAttribute("searchFormModel") @Valid ArticleListForm articleListForm, BindingResult result,ModelAndView mav) {
+    //検索機能のバリデーションチェック
+    if(result.hasErrors()){
+      mav = new ModelAndView();
+      mav.addObject(articleListForm);
+      mav.setViewName("article/index");
+      return mav;
+    }
     List<Article> datalist = service.findArticle(articleListForm);
     mav.setViewName("article/index");
     mav.addObject("searchFormModel",articleListForm);
@@ -40,6 +47,9 @@ public class ArticleController {
   @RequestMapping(value = "/create", method = RequestMethod.GET)
   public ModelAndView create(@ModelAttribute("formModel") Article article, ModelAndView mav) {
     mav.setViewName("article/create");
+    mav.addObject("title", "新規作成");
+    //ユーザIDを設定
+    article.setUser_id(1);
     mav.addObject("formModel", article);
     return mav;
   }
@@ -56,7 +66,7 @@ public class ArticleController {
       return return_mav;
     }
 
-    // 日付の設定
+    // 日付の設定をしてデータベースに追加登録
     article.setCreated_at(new Date());
     article.setUpdated_at(new Date());
     service.create(article);
@@ -75,9 +85,10 @@ public class ArticleController {
   // update
   @RequestMapping(value = "/{id}/edit", method = RequestMethod.GET)
   public ModelAndView edit(@PathVariable("id") Integer id, ModelAndView mav) {
-    mav.setViewName("/article/edit");
-    Article data = service.findOne(id);
-    mav.addObject("formModel", data);
+    mav.setViewName("/article/create");
+    Article article = service.findOne(id);
+    mav.addObject("title","記事編集");
+    mav.addObject("formModel", article);
     return mav;
   }
 

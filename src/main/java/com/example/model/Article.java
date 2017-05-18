@@ -22,7 +22,7 @@ public class Article {
   private int id;
   
   @Column(name="title")
-  @Size(max=255)
+  @Size(max=255 , message="文字数が多すぎます（最大２５５）")
   @NotEmpty(message="タイトルを入力してください")
   private String title;
   
