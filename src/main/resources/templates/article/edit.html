@@ -6,27 +6,28 @@
 <title th:text="${title}">title</title>
 </head>
 <body>
+<div class="container">
   <div th:include="common/navigation :: nav"></div>
-  <form method="post" th:object="${formModel}">
+  <form method="post" th:object="${formModel}" >
     <table>
       <tr>
         <td>Title</td>
         <td>
-          <input type="text" th:field="*{title}" th:placeholder="*{title}" th:errorclass="fieldError"/>
+          <input type="text" class="form-control" th:field="*{title}" th:placeholder="*{title}" th:errorclass="fieldError"/>
           <span th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></span>
         </td>
       </tr>
       <tr>
         <td>Description</td>
         <td>
-          <input type="text" th:field="*{description}" th:placeholder="*{description}" th:errorclass="fieldError"/>
+          <input type="text" class="form-control" th:field="*{description}" th:placeholder="*{description}" th:errorclass="fieldError"/>
           <span th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></span>
         </td>
       </tr>
       <tr>
         <td>User_id</td>
         <td>
-          <input type="text" th:field="*{user_id}" th:errorclass="fieldError"/>
+          <input type="text" class="form-control" th:field="*{user_id}" th:errorclass="fieldError"/>
           <span th:if="${#fields.hasErrors('user_id')}" th:errors="*{user_id}"></span>
         </td>
       </tr>
@@ -36,6 +37,6 @@
     </table>
   </form>
 <button class="previos-page-back btn btn-secondary">戻る</button>
-          
+</div>
 </body>
 </html>
