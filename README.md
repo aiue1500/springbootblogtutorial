@@ -50,6 +50,3 @@ CREATE TABLE article
 
 `http://localhost:8080/article/`にアクセスする
 
-進捗：
-記事のCRUD操作を実装
-バリデーションチェックまではできていない。
