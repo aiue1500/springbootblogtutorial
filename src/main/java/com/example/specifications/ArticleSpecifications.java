@@ -50,7 +50,7 @@ public class ArticleSpecifications {
       public Predicate toPredicate(Root<Article> root , CriteriaQuery<?> query , CriteriaBuilder cb){
         // String -> Date型変換
         Date formatDate;
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         try {
           formatDate = sdf.parse(updated_at);
         } catch (ParseException e) {

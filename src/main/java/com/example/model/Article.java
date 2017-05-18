@@ -9,6 +9,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 import org.hibernate.validator.constraints.NotEmpty;
@@ -22,13 +23,13 @@ public class Article {
   private int id;
   
   @Column(name="title")
-  @Size(max=255 , message="文字数が多すぎます（最大２５５）")
-  @NotEmpty(message="タイトルを入力してください")
+  @Size(max=255)
+  @NotEmpty
   private String title;
   
   @Column(name="description")
-  @Size(max=1000 ,message="文字数が多すぎます。(最大1000）")
-  @NotEmpty(message="本文を入力してください")
+  @Size(max=1000)
+  @NotEmpty
   private String description;
   
   @Column(name="created_at")
@@ -37,7 +38,7 @@ public class Article {
   @Column(name="updated_at")
   private Date updated_at;
   
-  @NotNull(message="ユーザIDが指定されていません。")
+  @NotNull
   @Column(name="user_id")
   private int user_id;
 

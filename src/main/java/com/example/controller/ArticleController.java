@@ -2,10 +2,12 @@ package com.example.controller;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -25,10 +27,13 @@ public class ArticleController {
 
   @Autowired
   ArticleService service;
+  
+  @Autowired
+  MessageSource msg;
 
-  // index
+  // index　記事一覧画面
   @RequestMapping(value = "/", method = RequestMethod.GET)
-  public ModelAndView index(@ModelAttribute("searchFormModel") @Valid ArticleListForm articleListForm, BindingResult result,ModelAndView mav) {
+  public ModelAndView index(@ModelAttribute("searchFormModel") @Valid ArticleListForm articleListForm, BindingResult result,ModelAndView mav,Locale locale) {
     //検索機能のバリデーションチェック
     if(result.hasErrors()){
       mav = new ModelAndView();
@@ -36,10 +41,19 @@ public class ArticleController {
       mav.setViewName("article/index");
       return mav;
     }
-    List<Article> datalist = service.findArticle(articleListForm);
+    //データをセットし、表示させる
+    List<Article> datalist = service.findArticles(articleListForm);
     mav.setViewName("article/index");
     mav.addObject("searchFormModel",articleListForm);
     mav.addObject("datalist", datalist);
+    //検索した場合、検索結果アラートを表示する　検索していない場合、ここはスキップされる
+    if(!articleListForm.isEmpty()){
+      if(datalist.size() == 0){
+        mav.addObject("search_result_alert",msg.getMessage("article.index.search_result.nothing", null,locale));
+      }else{
+        mav.addObject("search_result_alert",msg.getMessage("article.index.search_result.being",new String[]{String.valueOf(datalist.size())},locale)); 
+      }
+    }
     return mav;
   }
 
@@ -60,10 +74,10 @@ public class ArticleController {
     // バリデーションチェック
     if (result.hasErrors()) {
       // 入力情報を保持しつつ、作成画面に戻す
-      ModelAndView return_mav = new ModelAndView();
-      return_mav.addObject(article);
-      return_mav.setViewName("article/edit");
-      return return_mav;
+      mav = new ModelAndView();
+      mav.addObject(article);
+      mav.setViewName("article/edit");
+      return mav;
     }
 
     // 日付の設定をしてデータベースに追加登録
@@ -92,7 +106,7 @@ public class ArticleController {
     return mav;
   }
 
-  @RequestMapping(value = "/{id}/edit", method = RequestMethod.PUT)
+  @RequestMapping(value = "/{id}/edit", method = RequestMethod.POST)
   public ModelAndView post_edit(@ModelAttribute("formModel") Article article, BindingResult result, ModelAndView mav) {
     // 更新日付の更新
     article.setCreated_at(service.findOne(article.getId()).getCreated_at());

@@ -36,12 +36,13 @@ public class ArticleService {
   public Article findOne(Integer id){
     return repository.findOne(id);
   }
-  public List<Article> findArticle(ArticleListForm articleListForm){
+  public List<Article> findArticles(ArticleListForm articleListForm){
     return repository.findAll(
         Specifications
           .where(titleContains(articleListForm.getTitle()))
           .and(user_idContains(articleListForm.getUser_id()))
           .and(updated_atContains(articleListForm.getUpdated_at()))
+        ,new Sort(Sort.Direction.DESC,"id")
     );
   }
   //Update

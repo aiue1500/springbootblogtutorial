@@ -7,11 +7,11 @@ import javax.validation.constraints.Size;
 public class ArticleListForm {
   
   @Column(name="title")
-  @Size(max=255 , message="文字数が多すぎます（最大２５５）")
+  @Size(max=255)
   private String title;
   
-  @Size(max=10 , message="IDの数が多すぎます（最大10文字）")
-  @Pattern(regexp="[0-9]*" , message="入力値のタイプが不正です。")
+  @Size(max=10)
+  @Pattern(regexp="[0-9]*")
   private String user_id;
   
   private String updated_at;
@@ -36,5 +36,15 @@ public class ArticleListForm {
   }
   
   
+  /**
+   * @return 全ての項目に対して空かどうかチェックし、全て空だった場合、trueを返す
+   */
+  public boolean isEmpty(){
+    if(title == null && user_id == null && updated_at == null){
+      return true;
+    }
+    return false;
+    
+  }
   
 }
